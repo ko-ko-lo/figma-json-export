@@ -143,9 +143,34 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById("cancel").addEventListener("click", () => {
-          window.parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
-        });
+        const cancelButton = document.getElementById("cancel");
+        const createButton = document.getElementById("create");
+
+        if (cancelButton) {
+          cancelButton.addEventListener("click", () => {
+            window.parent.postMessage(
+              { pluginMessage: { type: "cancel" } },
+              "*"
+            );
+          });
+        }
+
+        if (createButton) {
+          createButton.addEventListener("click", () => {
+            window.parent.postMessage(
+              { pluginMessage: { type: "create" } },
+              "*"
+            );
+          });
+        }
+
+        // Listen for messages from `code.ts` and display an alert
+        window.onmessage = (event) => {
+          const { type, message } = event.data.pluginMessage;
+          if (type === "showMessage") {
+            alert(message); // Show an alert with the message
+          }
+        };
       });
     </script>
   </body>
