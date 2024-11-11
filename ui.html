@@ -140,5 +140,13 @@
       <button id="cancel" class="secondary-button">Cancel</button>
       <button id="create" class="primary-button">Generate Output</button>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("cancel").addEventListener("click", () => {
+          window.parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
+        });
+      });
+    </script>
   </body>
 </html>
