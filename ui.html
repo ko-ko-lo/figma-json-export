@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Color Code Exporter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --light-brown: #f4eeec;
+        --mid-brown: #b99589;
+        --light-berry: #eecdf4;
+        --mid-berry: #3f1047;
+        --dark-berry: #1d0721;
+        --button-padding: 14px 32px;
+        --radius: 4px;
+        --size-0: 0;
+        --size-2: 2px;
+        --size-8: 8px;
+        --size-16: 16px;
+        --size-20: 20px;
+        --size-24: 24px;
+        --size-32: 32px;
+        --size-48: 48px;
+        --size-64: 64px;
+        --font-weight-400: 400;
+        --font-weight-500: 500;
+      }
+
+      html {
+        margin: var(--size-0) var(--size-32);
+        padding: var(--size-0);
+      }
+
+      body {
+        margin: var(--size-0);
+        padding: var(--size-0);
+        font-family: "Lato", sans-serif;
+        font-weight: var(--font-weight-400);
+        font-size: var(--size-16);
+        font-style: normal;
+        background-color: var(--dark-berry);
+        color: var(--light-brown);
+      }
+
+      h1,
+      h2 {
+        font-weight: var(--font-weight-500);
+        color: var(--light-berry);
+      }
+
+      h1 {
+        font-size: var(--size-24);
+        margin: var(--size-48) var(--size-0) var(--size-24);
+      }
+
+      h2 {
+        font-size: var(--size-20);
+        margin: var(--size-32) var(--size-0) var(--size-8);
+      }
+
+      button {
+        font-family: "Lato", sans-serif;
+        border-radius: var(--radius);
+        padding: var(--button-padding);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: var(--font-weight-500);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      button:hover {
+        cursor: pointer;
+      }
+
+      .primary-button {
+        background-color: var(--light-berry);
+        color: var(--dark-berry);
+        border: var(--size-2) solid var(--light-berry);
+      }
+
+      .primary-button:hover {
+        background-color: var(--mid-brown);
+        border: var(--size-2) solid var(--mid-brown);
+      }
+
+      .secondary-button:hover {
+        background-color: var(--mid-berry);
+      }
+
+      .secondary-button {
+        background-color: var(--dark-berry);
+        color: var(--light-brown);
+        border: var(--size-2) solid var(--light-berry);
+        margin-right: var(--size-24);
+      }
+
+      .flex {
+        display: flex;
+        justify-content: flex-end;
+        margin: var(--size-48) var(--size-0) var(--size-64);
+      }
+
+      ol,
+      ul {
+        line-height: 1.6;
+        margin: var(--size-0);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Generate JSON from Text Layers</h1>
+    <p>
+      This plugin exports selected text layers from your Figma design into JSON
+      format.
+    </p>
+
+    <h2>Key Information</h2>
+    <ul>
+      <li>Uses layer names as keys (properties) for JSON fields</li>
+      <li>Groups of layers are exported as arrays</li>
+      <li>
+        Use the prefix <strong>"exclude-"</strong> to omit specific layers from
+        export
+      </li>
+    </ul>
+
+    <h2>Step-by-Step Guide</h2>
+    <ol>
+      <li>Prepare Your Figma Layers</li>
+      <li>Select Layers to Export</li>
+      <li>Run the Plugin</li>
+    </ol>
+
+    <div class="flex">
+      <button id="cancel" class="secondary-button">Cancel</button>
+      <button id="create" class="primary-button">Generate Output</button>
+    </div>
+  </body>
+</html>
