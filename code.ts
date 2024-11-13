@@ -17,27 +17,47 @@ async function buildJsonOutput(
       continue;
     }
 
-    // Process TextNodes
-    if (node.type === "TEXT") {
+    // Process Group or Frame nodes that contain TextNodes
+    if ("children" in node && node.children.length > 0) {
+      let textArray: string[] = []; // Array to store text content for this group
+
+      // Traverse child nodes within the group
+      for (let child of node.children) {
+        if (child.type === "TEXT") {
+          const textContent = (child as TextNode).characters;
+
+          // Split multiline text into separate lines if it contains "\n"
+          if (textContent.includes("\n")) {
+            textArray.push(
+              ...textContent.split("\n").map((line) => line.trim())
+            );
+          } else {
+            textArray.push(textContent.trim());
+          }
+        }
+      }
+
+      // If there is text content in the group, add it to jsonOutput using the group's name
+      if (textArray.length > 0) {
+        jsonOutput[node.name] = textArray;
+      }
+    }
+
+    // Process single TextNodes outside of groups
+    else if (node.type === "TEXT") {
       const textContent = (node as TextNode).characters;
 
-      // Check if the content contains newlines, convert to array if true
       if (textContent.includes("\n")) {
         jsonOutput[node.name] = textContent
           .split("\n")
           .map((line) => line.trim());
       } else {
-        jsonOutput[node.name] = textContent;
+        jsonOutput[node.name] = textContent.trim();
       }
-    }
-
-    // Add children to the queue if the node has children
-    if ("children" in node && node.children) {
-      queue.push(...(node.children as SceneNode[]));
     }
   }
 
-  return jsonOutput; // Return the JSON structure with text layer data
+  return jsonOutput; // Return the structured JSON output
 }
 
 async function checkSelection() {
