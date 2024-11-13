@@ -1,19 +1,34 @@
 figma.showUI(__html__);
 figma.ui.resize(650, 580);
 
-// Helper Function - Level Order Traversing Figma Tree
-async function levelOrderTextNodes(root: SceneNode): Promise<TextNode[]> {
-  if (!root) return [];
+async function buildJsonOutput(
+  root: SceneNode
+): Promise<{ [key: string]: any }> {
+  if (!root) return {}; // Return an empty object if root is invalid
 
-  let queue: SceneNode[] = [root];
-  let textNodes: TextNode[] = [];
+  let queue: SceneNode[] = [root]; // Queue for level-order traversal
+  let jsonOutput: { [key: string]: any } = {}; // Object to store JSON structure
 
   while (queue.length > 0) {
-    let node = queue.shift()!;
+    let node = queue.shift()!; // Remove the first node from the queue
 
-    // Check if the node is a TextNode and add it to the array
+    // Skip nodes with "exclude-" prefix
+    if (node.name.startsWith("exclude-")) {
+      continue;
+    }
+
+    // Process TextNodes
     if (node.type === "TEXT") {
-      textNodes.push(node as TextNode);
+      const textContent = (node as TextNode).characters;
+
+      // Check if the content contains newlines, convert to array if true
+      if (textContent.includes("\n")) {
+        jsonOutput[node.name] = textContent
+          .split("\n")
+          .map((line) => line.trim());
+      } else {
+        jsonOutput[node.name] = textContent;
+      }
     }
 
     // Add children to the queue if the node has children
@@ -21,27 +36,32 @@ async function levelOrderTextNodes(root: SceneNode): Promise<TextNode[]> {
       queue.push(...(node.children as SceneNode[]));
     }
   }
-  return textNodes;
+
+  return jsonOutput; // Return the JSON structure with text layer data
 }
 
 async function checkSelection() {
   const selection = figma.currentPage.selection;
 
-  // Check if any selected node contains TextNode(s)
-  let textNodes: TextNode[] = [];
+  // Initialize a variable to hold the combined JSON output
+  let combinedJsonOutput: { [key: string]: any } = {};
+
+  // Process each selected node
   for (const node of selection) {
-    const nodeTextNodes = await levelOrderTextNodes(node);
-    textNodes.push(...nodeTextNodes);
+    const nodeJson = await buildJsonOutput(node); // Generate JSON for each node
+    Object.assign(combinedJsonOutput, nodeJson); // Merge into the combined output
   }
 
-  // Determine if there are any text layers in the selection
-  if (textNodes.length > 0) {
-    console.log("Text layers found:", textNodes);
+  // Determine if the JSON has any keys (indicating text layers were found)
+  if (Object.keys(combinedJsonOutput).length > 0) {
+    console.log(
+      //Generated JSON Output:,
+      JSON.stringify(combinedJsonOutput, null, 2)
+    );
   } else {
     figma.ui.postMessage({
       type: "showMessage",
-      message:
-        "Please select at least one (text) layer to generate JSON output.",
+      message: "Please select at least one text layer to generate JSON output.",
     });
   }
 }
