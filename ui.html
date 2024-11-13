@@ -77,22 +77,22 @@
         cursor: pointer;
       }
 
-      .primary-button {
+      #create {
         background-color: var(--light-berry);
         color: var(--dark-berry);
         border: var(--size-2) solid var(--light-berry);
       }
 
-      .primary-button:hover {
+      #create:hover {
         background-color: var(--mid-brown);
         border: var(--size-2) solid var(--mid-brown);
       }
 
-      .secondary-button:hover {
+      #cancel:hover {
         background-color: var(--mid-berry);
       }
 
-      .secondary-button {
+      #cancel {
         background-color: var(--dark-berry);
         color: var(--light-brown);
         border: var(--size-2) solid var(--light-berry);
@@ -115,7 +115,7 @@
   <body>
     <h1>Generate JSON from Text Layers</h1>
     <p>
-      This plugin exports selected text layers from your Figma design into JSON
+      This plugin exports selected text layers from your Figma Design into JSON
       format.
     </p>
 
@@ -137,8 +137,8 @@
     </ol>
 
     <div class="flex">
-      <button id="cancel" class="secondary-button">Cancel</button>
-      <button id="create" class="primary-button">Generate Output</button>
+      <button id="cancel">Cancel</button>
+      <button id="create">Generate Output</button>
     </div>
 
     <script>
