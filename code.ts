@@ -4,7 +4,7 @@ figma.ui.resize(650, 580);
 async function buildJsonOutput(
   root: SceneNode
 ): Promise<{ [key: string]: any }> {
-  if (!root) return {}; // Return an empty object if root is invalid
+  if (!root) return {};
 
   let queue: SceneNode[] = [root]; // Queue for level-order traversal
   let jsonOutput: { [key: string]: any } = {}; // Object to store JSON structure
@@ -12,7 +12,6 @@ async function buildJsonOutput(
   while (queue.length > 0) {
     let node = queue.shift()!; // Remove the first node from the queue
 
-    // Skip nodes with "exclude-" prefix
     if (node.name.startsWith("exclude-")) {
       continue;
     }
@@ -57,7 +56,7 @@ async function buildJsonOutput(
     }
   }
 
-  return jsonOutput; // Return the structured JSON output
+  return jsonOutput;
 }
 
 async function checkSelection() {
