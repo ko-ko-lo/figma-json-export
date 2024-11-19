@@ -164,11 +164,23 @@
           });
         }
 
-        // Listen for messages from `code.ts` and display an alert
+        // Function to save the JSON content as a file
+        function saveFile(jsonContent) {
+          const blob = new Blob([jsonContent], { type: "application/json" });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "output.json";
+          link.click();
+        }
+
+        // Listen for messages from `code.ts`
         window.onmessage = (event) => {
-          const { type, message } = event.data.pluginMessage;
-          if (type === "showMessage") {
-            alert(message);
+          const { type, data } = event.data.pluginMessage;
+
+          if (type === "downloadJSON") {
+            saveFile(data); // Save the JSON file
+          } else if (type === "showMessage") {
+            alert(data); // Display alert messages
           }
         };
       });
