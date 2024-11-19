@@ -6,11 +6,14 @@ async function buildJsonOutput(
 ): Promise<{ [key: string]: any }> {
   if (!root) return {};
 
-  let queue: SceneNode[] = [root]; // Queue for level-order traversal
-  let jsonOutput: { [key: string]: any } = {}; // Object to store JSON structure
+  // Queue for level-order traversal
+  let queue: SceneNode[] = [root];
+  // Object to store JSON structure
+  let jsonOutput: { [key: string]: any } = {};
 
   while (queue.length > 0) {
-    let node = queue.shift()!; // Remove the first node from the queue
+    // Remove the first node from the queue
+    let node = queue.shift()!;
 
     if (node.name.startsWith("exclude-")) {
       continue;
@@ -18,8 +21,8 @@ async function buildJsonOutput(
 
     // Process GroupNode as an array if it contains TextNodes
     if (node.type === "GROUP") {
-      let textArray: string[] = []; // Array to store text content for this group
-
+      // Array to store text content for this group
+      let textArray: string[] = [];
       // Traverse child nodes within the group and collect TextNode content
       for (let child of node.children) {
         if (child.type === "TEXT") {
@@ -72,16 +75,16 @@ async function checkSelection() {
 
   // Process each selected node
   for (const node of selection) {
-    const nodeJson = await buildJsonOutput(node); // Generate JSON for each node
-    Object.assign(combinedJsonOutput, nodeJson); // Merge into the combined output
+    const nodeJson = await buildJsonOutput(node);
+    Object.assign(combinedJsonOutput, nodeJson);
   }
 
-  // Determine if the JSON has any keys (indicating text layers were found)
   if (Object.keys(combinedJsonOutput).length > 0) {
-    console.log(
-      //Generated JSON Output
-      JSON.stringify(combinedJsonOutput, null, 2)
-    );
+    const jsonString = JSON.stringify(combinedJsonOutput, null, 2);
+    figma.ui.postMessage({
+      type: "downloadJSON",
+      data: jsonString,
+    });
   } else {
     figma.ui.postMessage({
       type: "showMessage",
