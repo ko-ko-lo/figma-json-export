@@ -1,40 +1,36 @@
-Below are the steps to get your plugin running. You can also find instructions at:
+# Jsonify Plugin
 
-  https://www.figma.com/plugin-docs/plugin-quickstart-guide/
+_A simple tool to turn text layers into structured JSON files in seconds._
 
-This plugin template uses Typescript and NPM, two standard tools in creating JavaScript applications.
+Jsonify is a Figma plugin that converts text layer into structured JSON files, simplifying the design-to-development handoff. By leveraging layer names, groups, and hierarchies, it organizes text and nested structures into key-value pairs and arrays. This automation eliminates repetitive tasks like manual text copying, making workflows more efficient and streamlined.
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+![jsonify](https://github.com/user-attachments/assets/016e086b-348b-4af4-80fe-2efd2adb6028)
 
-  https://nodejs.org/en/download/
+## Key Features
 
-Next, install TypeScript using the command:
+- **Specific Layers with Prefixes are excluded:**
+The prefix "exclude-" is used to skip layers that are not wanted in the JSON output. This gives control over what gets exported, keeping the data clean and focused.
 
-  npm install -g typescript
+- **Auto Layout Layers are Ignored:**
+Auto layout layers are automatically excluded to ensure the exported JSON remains straightforward.
 
-Finally, in the directory of your plugin, get the latest type definitions for the plugin API by running:
+- **Layer Names Become Keys:**
+Each layer's name is transformed into a key in the JSON object, making the output structured and easy to use. Groups become arrays, and nested groups create hierarchical structures that mirror the design.
 
-  npm install --save-dev @figma/plugin-typings
+- **Line Breaks Create Arrays:**
+When a text layer contains line breaks (\n), the text is split into an array. Each line becomes a separate entry in the JSON, making it easy to handle lists or bullet points directly from the design.
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
+- **Grouped Layers as Arrays:**
+Groups in Figma are treated as arrays in the generated JSON. Each child layer inside the group becomes an array entry, keeping the structure intuitive and aligned with the design hierarchy. 
 
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+## How to use
 
-For more information, visit https://www.typescriptlang.org/
+- Prepare your Figma layers
+- Select layers to export
+- Run the plugin
 
-Using TypeScript requires a compiler to convert TypeScript (code.ts) into JavaScript (code.js)
-for the browser to run.
-
-We recommend writing TypeScript code using Visual Studio code:
-
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "npm: watch". You will have to do this again every time
-    you reopen Visual Studio Code.
-
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+## Tech Stack
+- **Figma API**: Retrieves and processes color collections.
+- **TypeScript/JavaScript**: Core logic.
+- **HTML & CSS**: For the plugin UI.
+  
