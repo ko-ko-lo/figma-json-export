@@ -30,7 +30,7 @@ Groups in Figma are treated as arrays in the generated JSON. Each child layer in
 - Run the plugin
 
 ## Tech Stack
-- **Figma API**: Retrieves and processes color collections.
+- **Figma API**: Retrieves and processes text layers.
 - **TypeScript/JavaScript**: Core logic.
 - **HTML & CSS**: For the plugin UI.
   
