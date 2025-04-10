@@ -1,34 +1,38 @@
-figma.showUI(__html__);
-figma.ui.resize(650, 580);
+/* ------------------------------------------------------------------
+JSONify Plugin by Denise Kolodzey
+Created with 🫖 and 🤍
+------------------------------------------------------------------ */
+
+figma.showUI(__html__, {
+  width: 600,
+  height: 670,
+  title: "JSONify - Created by Denise Kolodzey",
+});
+
+/* ------------------------------------------------------------------
+Recursively builds a JSON object from Figma scene nodes
+------------------------------------------------------------------ */
 
 async function buildJsonOutput(
   root: SceneNode
 ): Promise<{ [key: string]: any }> {
   if (!root) return {};
 
-  // Queue for level-order traversal
-  let queue: SceneNode[] = [root];
-  // Object to store JSON structure
   let jsonOutput: { [key: string]: any } = {};
 
-  while (queue.length > 0) {
-    // Remove the first node from the queue
-    let node = queue.shift()!;
-
+  const traverse = (node: SceneNode): void => {
     if (node.name.startsWith("exclude-")) {
-      continue;
+      return;
     }
 
-    // Process GroupNode as an array if it contains TextNodes
+    // --- Handle groups of text layers ---
     if (node.type === "GROUP") {
-      // Array to store text content for this group
       let textArray: string[] = [];
-      // Traverse child nodes within the group and collect TextNode content
       for (let child of node.children) {
         if (child.type === "TEXT") {
           const textContent = (child as TextNode).characters;
 
-          // Split multiline text into an array if it contains "\n"
+          // --- Split multiline text into an array if it contains "\n" (line-break) ---
           if (textContent.includes("\n")) {
             textArray.push(
               ...textContent.split("\n").map((line) => line.trim())
@@ -39,13 +43,12 @@ async function buildJsonOutput(
         }
       }
 
-      // If there is text content in the group, add it to jsonOutput using the group's name
       if (textArray.length > 0) {
         jsonOutput[node.name] = textArray;
       }
     }
 
-    // Process single TextNodes outside of groups
+    // --- Process single TextNodes outside of groups ---
     else if (node.type === "TEXT") {
       const textContent = (node as TextNode).characters;
 
@@ -58,22 +61,30 @@ async function buildJsonOutput(
       }
     }
 
-    // If the node has children (e.g., FrameNode), add children to the queue for further traversal
+    // --- If the node has children (e.g., FrameNode), process them recursively ---
     else if ("children" in node && node.children) {
-      queue.push(...(node.children as SceneNode[]));
+      for (let child of node.children) {
+        traverse(child);
+      }
     }
-  }
+  };
 
-  return jsonOutput; // Return the structured JSON output
+  // --- Start DFS traversal from the root node ---
+  traverse(root);
+
+  return jsonOutput;
 }
 
-async function checkSelection() {
+/* ------------------------------------------------------------------
+Processes the current selection and sends JSON output to the UI
+------------------------------------------------------------------ */
+
+async function handleSelection() {
   const selection = figma.currentPage.selection;
 
-  // Initialize a variable to hold the combined JSON output
   let combinedJsonOutput: { [key: string]: any } = {};
 
-  // Process each selected node
+  // --- Process each selected node ---
   for (const node of selection) {
     const nodeJson = await buildJsonOutput(node);
     Object.assign(combinedJsonOutput, nodeJson);
@@ -93,10 +104,15 @@ async function checkSelection() {
   }
 }
 
+/* ------------------------------------------------------------------
+Handle UI messages
+------------------------------------------------------------------ */
 figma.ui.onmessage = (msg: { type: string; count: number }) => {
   if (msg.type === "create") {
-    checkSelection();
+    handleSelection();
   } else if (msg.type === "cancel") {
+    figma.closePlugin();
+  } else if (msg.type === "downloadCompleted") {
     figma.closePlugin();
   }
 };
