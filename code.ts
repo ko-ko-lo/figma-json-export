@@ -5,8 +5,8 @@ Created with 🫖 and 🤍
 
 figma.showUI(__html__, {
   width: 600,
-  height: 670,
-  title: "JSONify - Created by Denise Kolodzey",
+  height: 610,
+  title: "JS Object Exporter - Created by Denise Kolodzey",
 });
 
 /* ------------------------------------------------------------------
