@@ -5,12 +5,12 @@ Created with 🫖 and 🤍
 
 figma.showUI(__html__, {
   width: 600,
-  height: 610,
-  title: "JS Object Exporter - Created by Denise Kolodzey",
+  height: 650,
+  title: "JSONify - Created by Denise Kolodzey",
 });
 
 /* ------------------------------------------------------------------
-Recursively builds a JSON object from Figma scene nodes
+Recursively builds an object from Figma scene nodes
 ------------------------------------------------------------------ */
 
 async function buildJsonOutput(

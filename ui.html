@@ -54,7 +54,7 @@
 
       h2 {
         font-size: var(--size-20);
-        margin: var(--size-32) var(--size-0) var(--size-8);
+        margin: var(--size-24) var(--size-0) var(--size-0);
       }
 
       /* ------------------------------ Button Styles ------------------------------ */
@@ -98,7 +98,7 @@
       .flex {
         display: flex;
         justify-content: flex-end;
-        margin: var(--size-48) var(--size-0) var(--size-64);
+        margin: var(--size-32) var(--size-0) var(--size-64);
       }
 
       /* ------------------------------ Text Styles ------------------------------ */
@@ -114,44 +114,41 @@
 
       p {
         line-height: var(--line-height);
-        margin-top: var(--size-24);
+        margin-top: var(--size-16);
       }
       strong {
         color: var(--light-berry);
       }
     </style>
   </head>
-  <body>
-    <h1>Export Text Layers as JavaScript Objects</h1>
 
-    <h2>How the Plugin Works</h2>
+  <body>
+    <h1>Export Text Layers as JSON</h1>
+    <p>Turn your Figma layers into structured JSON data.</p>
     <ul>
       <li>
         <strong>Layer names = Object keys</strong><br />Each layer name becomes
-        a key in your exported JavaScript Object.
+        a key in the exported JSON object.
       </li>
       <li>
-        <strong>Line breaks = list items</strong><br />Text with line breaks
-        (\n) is split into array entries.
+        <strong>Line breaks = Arrays</strong><br />Text containing line breaks
+        (\n) is split into an array of strings.
       </li>
       <li>
-        <strong>Auto layout is skipped</strong><br />Auto layout frames are
-        ignored to keep output clean.
+        <strong>Groups = Arrays</strong><br />Grouped text layers are exported
+        as array items under the group's name.
       </li>
       <li>
-        <strong>Prefix “exclude-” to skip</strong><br />Layers with names
-        starting with exclude- won't be included.
+        <strong>Prefix “exclude-” to skip</strong><br />Any layer whose name
+        starts with exclude- will be excluded from the export.
       </li>
     </ul>
-
-    <p>
-      Prepare your layers by naming or grouping them. Select the ones to export,
-      then run the plugin.
-    </p>
+    <h2>How the Plugin Works</h2>
+    <p>Name or group your layers → Select them → Run the plugin → Done!</p>
 
     <div class="flex">
       <button id="cancel">Cancel</button>
-      <button id="create">Export Object</button>
+      <button id="create">Export JSON</button>
     </div>
 
     <script>
